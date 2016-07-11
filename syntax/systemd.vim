@@ -27,7 +27,7 @@ syn match sdInt      contained nextgroup=sdErr /-\=\d\+/
 syn match sdInstance contained nextgroup=sdErr /\S\+/
 syn match sdOctal    contained nextgroup=sdErr /0\o\{3,4}/
 syn match sdDuration contained nextgroup=sdErr /\d\+/
-syn match sdDuration contained nextgroup=sdErr /\%(\d\+\%(s\|min\|h\|d\|w\|ms\|us\)\s*\)\+/
+syn match sdDuration contained nextgroup=sdErr /\v%(\d+\s*%(usec|us|msec|ms|sec(onds?)?|s|min(utes?)?|m|hours?|hr|h|days?|d|weeks?|w|months?|M|years?|y)\s*)+/
 syn match sdDatasize contained nextgroup=sdErr /\d\+[KMGT]/
 syn match sdHome     contained nextgroup=sdErr /\~/
 syn match sdFilename contained /\/\S*\_s/
