@@ -22,18 +22,19 @@ syn match sdEnvArg    contained /\$\i\+\|\${\i\+}/
 syn match sdFormatStr contained /%[inpINPfcrRt]/ containedin=ALLBUT,sdComment,sdErr
 
 " common data types
-syn match sdUInt     contained nextgroup=sdErr /\d\+/
-syn match sdInt      contained nextgroup=sdErr /-\=\d\+/
-syn match sdInstance contained nextgroup=sdErr /\S\+/
-syn match sdOctal    contained nextgroup=sdErr /0\o\{3,4}/
-syn match sdDuration contained nextgroup=sdErr /\d\+/
-syn match sdDuration contained nextgroup=sdErr /\v%(\d+\s*%(usec|us|msec|ms|sec(onds?)?|s|min(utes?)?|m|hours?|hr|h|days?|d|weeks?|w|months?|M|years?|y)\s*)+/
-syn match sdDatasize contained nextgroup=sdErr /\d\+[KMGT]/
-syn match sdHome     contained nextgroup=sdErr /\~/
-syn match sdFilename contained /\/\S*\_s/
-syn keyword sdBool   contained nextgroup=sdErr 1 yes true on 0 no false off
-syn keyword sdCal    contained nextgroup=sdErr minutely hourly daily monthly weekly yearly quarterly semiannually 
-syn match sdUnitName contained /\S\+\.\(automount\|mount\|swap\|socket\|service\|target\|path\|timer\|device\|slice\|busname\)\_s/
+syn match sdUInt       contained nextgroup=sdErr /\d\+/
+syn match sdInt        contained nextgroup=sdErr /-\=\d\+/
+syn match sdInstance   contained nextgroup=sdErr /\S\+/
+syn match sdOctal      contained nextgroup=sdErr /0\o\{3,4}/
+syn match sdDuration   contained nextgroup=sdErr /\d\+/
+syn match sdDuration   contained nextgroup=sdErr /\v%(\d+\s*%(usec|us|msec|ms|sec(onds?)?|s|min(utes?)?|m|hours?|hr|h|days?|d|weeks?|w|months?|M|years?|y)\s*)+/
+syn match sdDatasize   contained nextgroup=sdErr /\d\+[KMGT]/
+syn match sdPercentage contained nextgroup=sdErr /\d\+%/
+syn match sdHome       contained nextgroup=sdErr /\~/
+syn match sdFilename   contained /\/\S*\_s/
+syn keyword sdBool     contained nextgroup=sdErr 1 yes true on 0 no false off
+syn keyword sdCal      contained nextgroup=sdErr minutely hourly daily monthly weekly yearly quarterly semiannually 
+syn match sdUnitName   contained /\S\+\.\(automount\|mount\|swap\|socket\|service\|target\|path\|timer\|device\|slice\|busname\)\_s/
 syn match sdSliceName contained /\S\+\.slice\_s/
 
 " .include
@@ -94,8 +95,8 @@ syn match sdExecKey contained /^Limit\%(CPU\|FSIZE\|DATA\|STACK\|CORE\|RSS\|NOFI
 syn match sdExecKey contained /^\%(CPUSchedulingResetOnFork\|TTYReset\|TTYVHangup\|TTYVTDisallocate\|SyslogLevelPrefix\|ControlGroupModify\|PrivateTmp\|PrivateNetwork\|PrivateDevices\|NoNewPrivileges\)=/ nextgroup=sdBool,sdErr
 syn match sdExecKey contained /^\%(Nice\|OOMScoreAdjust\)=/ nextgroup=sdInt,sdErr
 syn match sdExecKey contained /^\%(CPUSchedulingPriority\|TimerSlackNSec\|CPUShares\)=/ nextgroup=sdUInt,sdErr
-syn match sdExecKey contained /^\%(MemoryLimit\|MemorySoftLimit\)=/ nextgroup=sdDatasize,sdErr
-syn match sdExecKey contained /^\%(ReadWrite\|ReadOnly\|Inaccessible\)Directories=/ nextgroup=sdFileList
+syn match sdExecKey contained /^\%(MemoryLimit\|MemorySoftLimit\)=/ nextgroup=sdDatasize,sdPercentage,sdErr
+syn match sdExecKey contained /^\%(ReadWrite\|ReadOnly\|Inaccessible\)\(Directories\|Paths\)=/ nextgroup=sdFileList
 syn match sdExecKey contained /^Device\%(Allow\|Deny\)=/ nextgroup=sdDevAllow,sdErr
 syn match sdExecKey contained /^DevicePolicy=/ nextgroup=sdDevPolicy,sdErr
 syn match sdExecKey contained /^CapabilityBoundingSet=/ nextgroup=sdCapNameList
@@ -117,7 +118,7 @@ syn match sdExecKey contained /^SendSIGHUP=/ nextgroup=sdBool,sdErr
 syn match sdExecKey contained /^Environment=/ nextgroup=sdEnvDefs
 syn match sdExecKey contained /^EnvironmentFile=-\=/ contains=sdEnvDashFlag nextgroup=sdFilename,sdErr
 
-syn match   sdExecFlag      contained /-\=@\=/ nextgroup=sdExecFile,sdErr
+syn match   sdExecFlag      contained /[-+]\=@\=/ nextgroup=sdExecFile,sdErr
 syn match   sdExecFile      contained /\/\S\+/ nextgroup=sdExecArgs
 syn match   sdExecArgs      contained /.*/ contains=sdEnvArg
 syn match   sdEnvDefs       contained /.*/ contains=sdEnvDef
@@ -188,7 +189,9 @@ syn match sdServiceKey contained /^Restart=/ nextgroup=sdRestartType,sdErr
 syn match sdServiceKey contained /^NotifyAccess=/ nextgroup=sdNotifyType,sdErr
 syn match sdServiceKey contained /^FileDescriptorStoreMax=/ nextgroup=sdInt,sdErr
 syn match sdServiceKey contained /^Delegate=/ nextgroup=sdBool,sdErr
-syn match sdServiceKey contained /^TasksMax=/ nextgroup=sdInt,sdErr
+syn match sdServiceKey contained /^MemoryDenyWriteExecute=/ nextgroup=sdBool,sdErr
+syn match sdServiceKey contained /^RestrictRealtime=/ nextgroup=sdBool,sdErr
+syn match sdServiceKey contained /^TasksMax=/ nextgroup=sdInt,sdPercentage,sdErr
 syn keyword sdServiceType contained nextgroup=sdErr simple forking dbus oneshot notify idle
 syn keyword sdRestartType contained nextgroup=sdErr no on-success on-failure on-abort always
 syn keyword sdNotifyType  contained nextgroup=sdErr none main all
