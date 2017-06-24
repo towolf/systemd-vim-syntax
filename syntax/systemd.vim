@@ -86,6 +86,8 @@ syn match sdInstallKey contained /^DefaultInstance=/ nextgroup=sdInstance,sdErr
 syn match sdExecKey contained /^Exec\%(Start\%(Pre\|Post\|\)\|Reload\|Stop\|StopPost\)=/ nextgroup=sdExecFlag,sdExecFile,sdErr
 syn match sdExecKey contained /^\%(RootDirectory\|TTYPath\)=/ nextgroup=sdFilename,sdErr
 syn match sdExecKey contained /^WorkingDirectory=-\=/ contains=sdWorkDirFlag nextgroup=sdHome,sdFilename,sdErr
+syn match sdExecKey contained /^RuntimeDirectory=/ nextgroup=sdInstance,sdErr
+syn match sdExecKey contained /^RuntimeDirectoryMode=/ nextgroup=sdOctal,sdErr
 " TODO: handle some of these better
 " CPUAffinity is: list of uint
 " BlockIOWeight is: uint\|filename uint
